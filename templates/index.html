@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="py-16 text-center" data-aos="fade-up">
+    <h1 class="text-5xl md:text-6xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
+        Achieve Your Financial Dreams
+    </h1>
+    <p class="text-lg md:text-xl mb-8 max-w-2xl mx-auto">
+        Track your finances, set goals, and get personalized AI-powered coaching to make your dreams a reality.
+    </p>
+    <a href="/register" class="btn-primary text-lg">Start Now</a>
+</section>
+
+<!-- Features Section -->
+<section class="py-12">
+    <h2 class="text-3xl font-bold text-center mb-12" data-aos="fade-up">Why Choose Us?</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="card p-6" data-aos="fade-up" data-aos-delay="100">
+            <div class="text-center">
+                <i class="bi bi-wallet2 text-4xl text-blue-400 mb-4"></i>
+                <h3 class="text-xl font-semibold mb-2">Track Finances</h3>
+                <p>Easily log your income and expenses with intuitive categories.</p>
+            </div>
+        </div>
+        <div class="card p-6" data-aos="fade-up" data-aos-delay="200">
+            <div class="text-center">
+                <i class="bi bi-trophy text-4xl text-purple-400 mb-4"></i>
+                <h3 class="text-xl font-semibold mb-2">Set Goals</h3>
+                <p>Define your financial goals and track your progress with gamified milestones.</p>
+            </div>
+        </div>
+        <div class="card p-6" data-aos="fade-up" data-aos-delay="300">
+            <div class="text-center">
+                <i class="bi bi-robot text-4xl text-blue-400 mb-4"></i>
+                <h3 class="text-xl font-semibold mb-2">AI Coaching</h3>
+                <p>Get personalized advice from our AI to optimize your savings.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-16 text-center" data-aos="fade-up">
+    <h2 class="text-3xl font-bold mb-4">Ready to Take Control?</h2>
+    <p class="text-lg mb-8">Join thousands of users achieving their financial goals with Finance Forecaster.</p>
+    <a href="/register" class="btn-primary text-lg">Get Started Today</a>
+</section>
+{% endblock %}
