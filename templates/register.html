@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="py-16 max-w-md mx-auto" data-aos="fade-up">
+    <h2 class="text-3xl font-bold text-center mb-8">Register</h2>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="bg-{{ 'green' if category == 'success' else 'red' }}-500 text-white p-4 rounded mb-4">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    <form method="POST" class="card p-6">
+        {{ form.hidden_tag() }}
+        <div class="mb-4">
+            <label for="username" class="block text-white mb-2">Username</label>
+            {{ form.username(class="w-full p-2 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:border-blue-400") }}
+            {% for error in form.username.errors %}
+                <p class="text-red-400 mt-1">{{ error }}</p>
+            {% endfor %}
+        </div>
+        <div class="mb-4">
+            <label for="email" class="block text-white mb-2">Email</label>
+            {{ form.email(class="w-full p-2 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:border-blue-400") }}
+            {% for error in form.email.errors %}
+                <p class="text-red-400 mt-1">{{ error }}</p>
+            {% endfor %}
+        </div>
+        <div class="mb-4">
+            <label for="password" class="block text-white mb-2">Password</label>
+            {{ form.password(class="w-full p-2 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:border-blue-400") }}
+            {% for error in form.password.errors %}
+                <p class="text-red-400 mt-1">{{ error }}</p>
+            {% endfor %}
+        </div>
+        <div class="mb-4">
+            <label for="confirm_password" class="block text-white mb-2">Confirm Password</label>
+            {{ form.confirm_password(class="w-full p-2 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:border-blue-400") }}
+            {% for error in form.confirm_password.errors %}
+                <p class="text-red-400 mt-1">{{ error }}</p>
+            {% endfor %}
+        </div>
+        <div class="text-center">
+            {{ form.submit(class="btn-primary") }}
+        </div>
+        <p class="mt-4 text-center">
+            Already have an account? <a href="{{ url_for('login') }}" class="text-blue-400 hover:underline">Login</a>
+        </p>
+    </form>
+</section>
+{% endblock %}

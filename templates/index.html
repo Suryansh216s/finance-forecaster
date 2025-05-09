@@ -3,13 +3,22 @@
 {% block content %}
 <!-- Hero Section -->
 <section class="py-16 text-center" data-aos="fade-up">
-    <h1 class="text-5xl md:text-6xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
-        Achieve Your Financial Dreams
-    </h1>
-    <p class="text-lg md:text-xl mb-8 max-w-2xl mx-auto">
-        Track your finances, set goals, and get personalized AI-powered coaching to make your dreams a reality.
-    </p>
-    <a href="/register" class="btn-primary text-lg">Start Now</a>
+    {% if current_user.is_authenticated %}
+        <h1 class="text-5xl md:text-6xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
+            Welcome, {{ current_user.username }}!
+        </h1>
+        <p class="text-lg md:text-xl mb-8 max-w-2xl mx-auto">
+            Track your finances, set goals, and get personalized AI-powered coaching.
+        </p>
+    {% else %}
+        <h1 class="text-5xl md:text-6xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
+            Achieve Your Financial Dreams
+        </h1>
+        <p class="text-lg md:text-xl mb-8 max-w-2xl mx-auto">
+            Track your finances, set goals, and get personalized AI-powered coaching to make your dreams a reality.
+        </p>
+        <a href="/register" class="btn-primary text-lg">Start Now</a>
+    {% endif %}
 </section>
 
 <!-- Features Section -->
@@ -59,6 +68,8 @@
 <section class="py-16 text-center" data-aos="fade-up">
     <h2 class="text-3xl font-bold mb-4">Ready to Take Control?</h2>
     <p class="text-lg mb-8">Join thousands of users achieving their financial goals with Finance Forecaster.</p>
-    <a href="/register" class="btn-primary text-lg">Get Started Today</a>
+    {% if not current_user.is_authenticated %}
+        <a href="/register" class="btn-primary text-lg">Get Started Today</a>
+    {% endif %}
 </section>
 {% endblock %}

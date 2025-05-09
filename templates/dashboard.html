@@ -1,0 +1,269 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="py-16" data-aos="fade-up">
+    <h2 class="text-3xl font-bold text-center mb-8">Your Financial Dashboard</h2>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="bg-{{ 'green' if category == 'success' else 'red' }}-500 text-white p-4 rounded mb-4 mx-auto max-w-2xl">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <!-- Financial Summary -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+        <div class="card p-6 text-center" data-aos="fade-up" data-aos-delay="100">
+            <h3 class="text-xl font-semibold mb-2">Total Income</h3>
+            <p class="text-2xl text-green-400">₹{{ total_income | round(2) }}</p>
+        </div>
+        <div class="card p-6 text-center" data-aos="fade-up" data-aos-delay="200">
+            <h3 class="text-xl font-semibold mb-2">Total Expenses</h3>
+            <p class="text-2xl text-red-400">₹{{ total_expenses | round(2) }}</p>
+        </div>
+        <div class="card p-6 text-center" data-aos="fade-up" data-aos-delay="300">
+            <h3 class="text-xl font-semibold mb-2">Balance</h3>
+            <p class="text-2xl {{ 'text-green-400' if balance >= 0 else 'text-red-400' }}">₹{{ balance | round(2) }}</p>
+        </div>
+    </div>
+
+    <!-- Forms Section -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+        <!-- Add Income Form -->
+        <div class="card p-6" data-aos="fade-up" data-aos-delay="100">
+            <h3 class="text-xl font-semibold mb-4 text-center">Add Income</h3>
+            <form method="POST">
+                {{ income_form.hidden_tag() }}
+                <input type="hidden" name="form_name" value="income">
+                <div class="mb-4">
+                    <label for="amount" class="block text-white mb-2">Amount</label>
+                    {{ income_form.amount(class="w-full p-2 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:border-blue-400") }}
+                    {% for error in income_form.amount.errors %}
+                        <p class="text-red-400 mt-1">{{ error }}</p>
+                    {% endfor %}
+                </div>
+                <div class="mb-4">
+                    <label for="description" class="block text-white mb-2">Description</label>
+                    {{ income_form.description(class="w-full p-2 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:border-blue-400") }}
+                    {% for error in income_form.description.errors %}
+                        <p class="text-red-400 mt-1">{{ error }}</p>
+                    {% endfor %}
+                </div>
+                <div class="mb-4">
+                    <label for="date" class="block text-white mb-2">Date</label>
+                    {{ income_form.date(class="w-full p-2 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:border-blue-400") }}
+                    {% for error in income_form.date.errors %}
+                        <p class="text-red-400 mt-1">{{ error }}</p>
+                    {% endfor %}
+                </div>
+                <div class="text-center">
+                    {{ income_form.submit(class="btn-primary") }}
+                </div>
+            </form>
+        </div>
+
+        <!-- Add Expense Form -->
+        <div class="card p-6" data-aos="fade-up" data-aos-delay="200">
+            <h3 class="text-xl font-semibold mb-4 text-center">Add Expense</h3>
+            <form method="POST">
+                {{ expense_form.hidden_tag() }}
+                <input type="hidden" name="form_name" value="expense">
+                <div class="mb-4">
+                    <label for="amount" class="block text-white mb-2">Amount</label>
+                    {{ expense_form.amount(class="w-full p-2 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:border-blue-400") }}
+                    {% for error in expense_form.amount.errors %}
+                        <p class="text-red-400 mt-1">{{ error }}</p>
+                    {% endfor %}
+                </div>
+                <div class="mb-4">
+                    <label for="description" class="block text-white mb-2">Description</label>
+                    {{ expense_form.description(class="w-full p-2 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:border-blue-400") }}
+                    {% for error in expense_form.description.errors %}
+                        <p class="text-red-400 mt-1">{{ error }}</p>
+                    {% endfor %}
+                </div>
+                <div class="mb-4">
+                    <label for="category" class="block text-white mb-2">Category</label>
+                    {{ expense_form.category(class="w-full p-2 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:border-blue-400") }}
+                    {% for error in expense_form.category.errors %}
+                        <p class="text-red-400 mt-1">{{ error }}</p>
+                    {% endfor %}
+                </div>
+                <div class="mb-4">
+                    <label for="date" class="block text-white mb-2">Date</label>
+                    {{ expense_form.date(class="w-full p-2 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:border-blue-400") }}
+                    {% for error in expense_form.date.errors %}
+                        <p class="text-red-400 mt-1">{{ error }}</p>
+                    {% endfor %}
+                </div>
+                <div class="text-center">
+                    {{ expense_form.submit(class="btn-primary") }}
+                </div>
+            </form>
+        </div>
+
+        <!-- Add Goal Form -->
+        <div class="card p-6" data-aos="fade-up" data-aos-delay="300">
+            <h3 class="text-xl font-semibold mb-4 text-center">Add Goal</h3>
+            <form method="POST">
+                {{ goal_form.hidden_tag() }}
+                <input type="hidden" name="form_name" value="goal">
+                <div class="mb-4">
+                    <label for="title" class="block text-white mb-2">Goal Title</label>
+                    {{ goal_form.title(class="w-full p-2 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:border-blue-400") }}
+                    {% for error in goal_form.title.errors %}
+                        <p class="text-red-400 mt-1">{{ error }}</p>
+                    {% endfor %}
+                </div>
+                <div class="mb-4">
+                    <label for="target_amount" class="block text-white mb-2">Target Amount</label>
+                    {{ goal_form.target_amount(class="w-full p-2 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:border-blue-400") }}
+                    {% for error in goal_form.target_amount.errors %}
+                        <p class="text-red-400 mt-1">{{ error }}</p>
+                    {% endfor %}
+                </div>
+                <div class="mb-4">
+                    <label for="deadline" class="block text-white mb-2">Deadline</label>
+                    {{ goal_form.deadline(class="w-full p-2 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:border-blue-400") }}
+                    {% for error in goal_form.deadline.errors %}
+                        <p class="text-red-400 mt-1">{{ error }}</p>
+                    {% endfor %}
+                </div>
+                <div class="text-center">
+                    {{ goal_form.submit(class="btn-primary") }}
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Expense Breakdown Pie Chart -->
+    {% if expense_categories %}
+        <div class="card p-6 mb-12 mx-auto max-w-lg" data-aos="fade-up">
+            <h3 class="text-xl font-semibold mb-4 text-center">Expense Breakdown</h3>
+            <canvas id="expenseChart"></canvas>
+        </div>
+    {% endif %}
+
+    <!-- Recent Income -->
+    <div class="card p-6 mb-12" data-aos="fade-up">
+        <h3 class="text-xl font-semibold mb-4">Recent Income</h3>
+        {% if incomes %}
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead>
+                        <tr class="border-b border-gray-600">
+                            <th class="py-2">Amount</th>
+                            <th class="py-2">Description</th>
+                            <th class="py-2">Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for income in incomes %}
+                            <tr class="border-b border-gray-600">
+                                <td class="py-2">₹{{ income.amount | round(2) }}</td>
+                                <td class="py-2">{{ income.description }}</td>
+                                <td class="py-2">{{ income.date.strftime('%Y-%m-%d') }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p class="text-center">No income recorded yet.</p>
+        {% endif %}
+    </div>
+
+    <!-- Recent Expenses -->
+    <div class="card p-6 mb-12" data-aos="fade-up">
+        <h3 class="text-xl font-semibold mb-4">Recent Expenses</h3>
+        {% if expenses %}
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead>
+                        <tr class="border-b border-gray-600">
+                            <th class="py-2">Amount</th>
+                            <th class="py-2">Description</th>
+                            <th class="py-2">Category</th>
+                            <th class="py-2">Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for expense in expenses %}
+                            <tr class="border-b border-gray-600">
+                                <td class="py-2">₹{{ expense.amount | round(2) }}</td>
+                                <td class="py-2">{{ expense.description }}</td>
+                                <td class="py-2">{{ expense.category }}</td>
+                                <td class="py-2">{{ expense.date.strftime('%Y-%m-%d') }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p class="text-center">No expenses recorded yet.</p>
+        {% endif %}
+    </div>
+
+    <!-- Financial Goals -->
+    <div class="card p-6" data-aos="fade-up">
+        <h3 class="text-xl font-semibold mb-4">Financial Goals</h3>
+        {% if goals %}
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {% for goal in goals %}
+                    <div class="card p-4">
+                        <h4 class="text-lg font-semibold">{{ goal.title }}</h4>
+                        <p>Target: ₹{{ goal.target_amount | round(2) }}</p>
+                        <p>Current: ₹{{ goal.current_amount | round(2) }}</p>
+                        <p>Deadline: {{ goal.deadline.strftime('%Y-%m-%d') }}</p>
+                        <div class="w-full bg-gray-600 rounded-full h-4 mt-2">
+                            <div class="bg-blue-400 h-4 rounded-full" style="width: {{ (goal.current_amount / goal.target_amount * 100) if goal.target_amount > 0 else 0 }}%"></div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-center">No goals set yet.</p>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Chart.js for Expense Pie Chart -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    {% if expense_categories %}
+        const ctx = document.getElementById('expenseChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: {{ expense_categories.keys() | list | tojson }},
+                datasets: [{
+                    data: {{ expense_categories.values() | list | tojson }},
+                    backgroundColor: [
+                        '#3b82f6',
+                        '#8b5cf6',
+                        '#f87171',
+                        '#34d399',
+                        '#fbbf24'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            color: '#e5e7eb'
+                        }
+                    }
+                }
+            }
+        });
+    {% endif %}
+</script>
+{% endblock %}
