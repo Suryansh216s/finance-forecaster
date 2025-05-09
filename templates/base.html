@@ -15,6 +15,15 @@
             color: #e5e7eb;
             margin: 0;
             padding: 0;
+            position: relative;
+        }
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100vh;
+            top: 0;
+            left: 0;
+            z-index: 0;
         }
         .navbar {
             background: rgba(17, 24, 39, 0.9);
@@ -42,7 +51,8 @@
         }
         .card {
             background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid transparent;
+            border-image: linear-gradient(to right, #3b82f6, #8b5cf6) 1;
             border-radius: 12px;
             transition: transform 0.3s, box-shadow 0.3s;
         }
@@ -66,6 +76,8 @@
             backdrop-filter: blur(10px);
             padding: 2rem 0;
             margin-top: 2rem;
+            position: relative;
+            z-index: 10;
         }
         .dark-mode-toggle {
             cursor: pointer;
@@ -83,6 +95,26 @@
         }
         .dark-mode .card {
             background: rgba(0, 0, 0, 0.2);
+        }
+        .scroll-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #3b82f6;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 100;
+        }
+        .scroll-to-top.visible {
+            opacity: 1;
         }
         @media (max-width: 640px) {
             .navbar {
@@ -120,6 +152,7 @@
     </style>
 </head>
 <body class="flex flex-col min-h-screen">
+    <div id="particles-js"></div>
     <nav class="navbar p-4 flex justify-between items-center">
         <a href="/" class="text-2xl font-bold text-white">Finance Forecaster</a>
         <div class="flex items-center">
@@ -135,11 +168,11 @@
             </div>
         </div>
     </nav>
-    <main class="container mx-auto p-4 flex-grow">
+    <main class="container mx-auto p-4 flex-grow relative z-10">
         {% block content %}{% endblock %}
     </main>
     <footer class="footer text-center text-white">
-        <p>&copy; 2025 Finance Forecaster. All rights reserved.</p>
+        <p>© 2025 Finance Forecaster. All rights reserved.</p>
         <div class="mt-2">
             <a href="https://github.com/Suryansh216s/finance-forecaster" class="text-white mr-4 hover:text-blue-400">
                 <i class="bi bi-github"></i> GitHub
@@ -149,14 +182,87 @@
             </a>
         </div>
     </footer>
+    <div class="scroll-to-top" onclick="scrollToTop()">
+        <i class="bi bi-arrow-up"></i>
+    </div>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
+        particlesJS('particles-js', {
+            "particles": {
+                "number": {
+                    "value": 80,
+                    "density": {
+                        "enable": true,
+                        "value_area": 800
+                    }
+                },
+                "color": {
+                    "value": "#ffffff"
+                },
+                "shape": {
+                    "type": "circle",
+                    "stroke": {
+                        "width": 0,
+                        "color": "#000000"
+                    }
+                },
+                "opacity": {
+                    "value": 0.5,
+                    "random": false
+                },
+                "size": {
+                    "value": 3,
+                    "random": true
+                },
+                "line_linked": {
+                    "enable": true,
+                    "distance": 150,
+                    "color": "#ffffff",
+                    "opacity": 0.4,
+                    "width": 1
+                },
+                "move": {
+                    "enable": true,
+                    "speed": 2,
+                    "direction": "none",
+                    "random": false,
+                    "straight": false,
+                    "out_mode": "out",
+                    "bounce": false
+                }
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": {
+                    "onhover": {
+                        "enable": true,
+                        "mode": "repulse"
+                    },
+                    "onclick": {
+                        "enable": true,
+                        "mode": "push"
+                    },
+                    "resize": true
+                },
+                "modes": {
+                    "repulse": {
+                        "distance": 100,
+                        "duration": 0.4
+                    },
+                    "push": {
+                        "particles_nb": 4
+                    }
+                }
+            },
+            "retina_detect": true
+        });
+
         AOS.init({
             duration: 1000,
             once: true
         });
 
-        // Hamburger menu toggle
         const hamburger = document.querySelector('.hamburger');
         const navbarMenu = document.querySelector('.navbar-menu');
         hamburger.addEventListener('click', () => {
@@ -166,7 +272,6 @@
             icon.classList.toggle('bi-x');
         });
 
-        // Dark mode toggle
         function toggleDarkMode() {
             document.body.classList.toggle('dark-mode');
             const icon = document.querySelector('.dark-mode-toggle');
@@ -174,6 +279,22 @@
             icon.classList.toggle('bi-sun');
         }
         document.querySelector('.dark-mode-toggle').addEventListener('click', toggleDarkMode);
+
+        const scrollToTopBtn = document.querySelector('.scroll-to-top');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                scrollToTopBtn.classList.add('visible');
+            } else {
+                scrollToTopBtn.classList.remove('visible');
+            }
+        });
+
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
     </script>
 </body>
 </html>
